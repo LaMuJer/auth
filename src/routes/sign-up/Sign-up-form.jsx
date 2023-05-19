@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { createAuthUserWithEmail_Password } from "../../utils/firebase.util"
 
 const SignUpForm = () => {
 
@@ -9,39 +10,42 @@ const SignUpForm = () => {
         confirmPassword: ""
     }
 
-    const [formField, setFormField] = useState(defaultFormfields)
-    const { displayName, email, password, confirmPassword } = formField
+    const [formfields, setFormfields] = useState(defaultFormfields)
+    const { displayName, email, password, confirmPassword } = formfields
 
     const handleChange = (event) => {
         const { name, value } = event.target
-
-        setFormField({ ...formField, [name]: value })
-
+        setFormfields({
+            ...formfields,
+            [name]: value
+        })
     }
 
     const handleSubmit = async (event) => {
         event.preventDefault()
-        console.log('first')
 
         if (password !== confirmPassword) {
-            alert("Your Password does not match")
+            alert("Yours Passwords do not match!")
             return
-        };
-
-        try {
-            const response = await createAuthusersWithEmailandPassword(email, password)
-            console.log(response)
-        } catch (error) {
-
         }
 
-
+        try {
+            const { user } = await createAuthUserWithEmail_Password(email, password)
+            await createAuthUserWithEmail_Password(user, { displayName })
+        } catch (error) {
+            if (error.code === "auth/email-already-in-use") {
+                alert("Email already exists!")
+            }
+            else {
+                console.log("Server Error" + error.message)
+            }
+        }
     }
 
     return (
         <>
             <h1>Sign Up with your Email and Password</h1>
-            <form onSubmit={() => { }}>
+            <form onSubmit={handleSubmit}>
                 <label htmlFor="Display Name">Display Name</label>
                 <input type="text" required onChange={handleChange} name="displayName" value={displayName} />
 
@@ -54,7 +58,7 @@ const SignUpForm = () => {
                 <label htmlFor="Confirm Password">Confirm Password</label>
                 <input type="password" required onChange={handleChange} name="confirmPassword" value={confirmPassword} />
 
-                <button type="submit" onSubmit={handleSubmit}>Sign Up</button>
+                <button type="submit" >Sign Up</button>
 
             </form>
         </>

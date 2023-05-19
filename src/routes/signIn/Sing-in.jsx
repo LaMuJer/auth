@@ -6,10 +6,10 @@ import { useEffect } from "react";
 
 const SingIn = () => {
 
-    useEffect(async () => {
-        const response = await getRedirectResult(auth)
-        console.log(response)
-    }, [])
+    // useEffect(async () => {
+    //     const response = await getRedirectResult(auth)
+    //     console.log(response)
+    // }, [])
 
     const handleSignInUserWithPopUp = async () => {
         const { user } = await signInWithGooglePopup()
@@ -23,7 +23,7 @@ const SingIn = () => {
             <button onClick={handleSignInUserWithPopUp}>SignIn with Google Pop Up</button>
             <button onClick={signInWithGoogleRedirect}>SignIn with Google Redirect</button>
 
-            {/* <SignUpForm /> */}
+            <SignUpForm />
         </>
     )
 }
