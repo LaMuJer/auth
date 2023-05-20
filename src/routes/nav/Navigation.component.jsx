@@ -5,12 +5,18 @@ import Logo from "../../assets/o2.svg"
 import { useContext } from "react"
 
 import { UserContext } from "../../contexts/User.contenxt"
+import { signOutUser } from "../../utils/firebase.util"
 
 const NavigationComponent = () => {
 
-    const { currentUser } = useContext(UserContext)
+    const { currentUser, setCurrentUser } = useContext(UserContext)
 
-    console.log(currentUser)
+    // console.log(currentUser)
+
+    const signOuthandler = async () => {
+        await signOutUser()
+        setCurrentUser(null)
+    }
 
     return (
         <>
@@ -25,9 +31,14 @@ const NavigationComponent = () => {
                     <Link className="nav-link" to={'/shop'}>
                         SHOP
                     </Link>
-                    <Link className="nav-link" to={'/sign-in'}>
-                        Sign In
-                    </Link>
+                    {currentUser ? (
+                        <span className="nav-link" onClick={signOuthandler}>Sign Out</span>
+                    ) : (
+                        <Link className="nav-link" to={'/sign-in'}>
+                            Sign In
+                        </Link>
+                    )}
+
                 </div>
             </div>
             <Outlet />
