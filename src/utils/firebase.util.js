@@ -50,7 +50,7 @@ export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googlePro
 const db = getFirestore()
 
 export const createUserDocumentFromAuth = async (userAuth, additionalInformation = {}) => {
-    const userRef = doc(db, "secondUsers", userAuth.uid)
+    const userRef = doc(db, "users", userAuth.uid)
 
     const userSnapShot = await getDoc(userRef)
     console.log(userSnapShot.exists())
