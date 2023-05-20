@@ -2,8 +2,16 @@ import { Link, Outlet } from "react-router-dom"
 import "./Navigation.scss"
 
 import Logo from "../../assets/o2.svg"
+import { useContext } from "react"
+
+import { UserContext } from "../../contexts/User.contenxt"
 
 const NavigationComponent = () => {
+
+    const { currentUser } = useContext(UserContext)
+
+    console.log(currentUser)
+
     return (
         <>
             <div className="navigation">

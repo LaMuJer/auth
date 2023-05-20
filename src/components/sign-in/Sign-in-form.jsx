@@ -1,11 +1,14 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import "./sign-in-form.scss"
 import Button from "../button/Button"
 import FormInput from "../form-input/FormInput"
-import { getRedirectResult, signInWithPopup } from "firebase/auth"
-import { createUserDocumentFromAuth, auth } from "../../utils/firebase.util"
+import { getRedirectResult } from "firebase/auth"
+import { createUserDocumentFromAuth, auth, signInAuthUserWithEmail_Password, signInWithGooglePopup } from "../../utils/firebase.util"
+import { UserContext } from "../../contexts/User.contenxt"
 
 const SignInForm = () => {
+
+    const { setCurrentUser } = useContext(UserContext)
 
     const defaultFormfields = {
         email: "",
@@ -28,9 +31,8 @@ const SignInForm = () => {
     }, [])
 
     const handleSignInUserWithPopUp = async () => {
-        const { user } = await signInWithPopup()
-        console.log(user)
-        // const userDocRef = await createUserDocumentFromAuth(user)
+        const { user } = await signInWithGooglePopup()
+        await createUserDocumentFromAuth(user)
     }
 
     const handleChange = (event) => {
@@ -45,11 +47,13 @@ const SignInForm = () => {
         event.preventDefault()
 
         try {
-
+            const { user } = await signInAuthUserWithEmail_Password(email, password)
+            setCurrentUser(user)
             resetFormfields()
 
+            console.log('first')
         } catch (error) {
-
+            console.log(error.message)
         }
     }
 
@@ -75,8 +79,10 @@ const SignInForm = () => {
                     value={password}
                 />
 
-                <Button type="submit">Sign In</Button>
-                <Button onClick={handleSignInUserWithPopUp} >Sign In with Google</Button>
+                <div className="button-container">
+                    <Button type="submit">Sign In</Button>
+                    <Button type="button" buttonType={'google'} onClick={handleSignInUserWithPopUp} >Sign In with Google</Button>
+                </div>
 
             </form>
         </div>
