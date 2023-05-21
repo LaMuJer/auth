@@ -25,14 +25,13 @@ const SignInForm = () => {
     useEffect(() => {
         const fetchData = async () => {
             const response = await getRedirectResult(auth)
-            console.log(response)
+            // console.log(response)
         }
         fetchData()
     }, [])
 
     const handleSignInUserWithPopUp = async () => {
-        const { user } = await signInWithGooglePopup()
-        await createUserDocumentFromAuth(user)
+        await signInWithGooglePopup()
     }
 
     const handleChange = (event) => {
@@ -48,8 +47,8 @@ const SignInForm = () => {
 
         try {
             const { user } = await signInAuthUserWithEmail_Password(email, password)
-            setCurrentUser(user)
-            // resetFormfields()
+            // setCurrentUser(user)
+            resetFormfields()
         } catch (error) {
             console.log(error.message)
         }

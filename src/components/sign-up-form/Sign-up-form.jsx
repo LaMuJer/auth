@@ -8,7 +8,6 @@ import { UserContext } from "../../contexts/User.contenxt"
 
 const SignUpForm = () => {
 
-    const { setCurrentUser } = useContext(UserContext)
 
     const defaultFormfields = {
         displayName: "",
@@ -42,7 +41,6 @@ const SignUpForm = () => {
 
         try {
             const { user } = await createAuthUserWithEmail_Password(email, password)
-            setCurrentUser(user)
             await createUserDocumentFromAuth(user, { displayName })
             resetFormfields()
 
